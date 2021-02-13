@@ -1,0 +1,69 @@
+---
+title: "AoC 2020 - Day 10"
+output: html_notebook
+author: "Joseph Richardson"
+---
+
+
+```{r}
+rm(list = ls()) #Clear the environment
+in10 <- read.csv("~/Documents/Data Science/Advent of Code/Inputs/AoC - Day 10 - Sheet1.csv", 
+                      header=FALSE, comment.char="#")
+test1 <- read.csv("~/Documents/Data Science/Advent of Code/Inputs/AoC - Day 10 test 1 - Sheet1.csv", 
+                      header=FALSE, comment.char="#")
+test2 <- read.csv("~/Documents/Data Science/Advent of Code/Inputs/AoC - Day 10 test 2 - Sheet1.csv", 
+                      header=FALSE, comment.char="#")
+
+View(in10)
+View(test1)
+
+# PART 1
+
+in10 = rbind(in10, 0, max(in10)+3)
+
+diffs = c()
+ones = 0
+threes = 0
+in10 = unlist(sort(in10[,1]))
+for (i in 2:length(in10)){
+  diffs = rbind(diffs, (in10[i]-in10[(i-1)]))
+  if (in10[i]-in10[(i-1)] == 1){ones = ones + 1}
+  if (in10[i]-in10[(i-1)] == 3){threes = threes + 1}
+}
+ones*threes
+
+# PART 2
+
+counts <- function(x) {
+  c = 0
+  print(c)
+  for (j in 1:3) {
+    if ((x+j) <= length(in10)){
+      if (in10[x+j]-in10[(x)] <= 3){c = c + counts(x+j)}
+    }
+  }
+  if (x+1 == length(in10)){return (1)}
+  else {return (c)}
+}
+
+counts(1)
+
+test1 = sort(unlist(rbind(test2, 0, max(test2)+3)))
+counts <- function(x) {
+  c = 0
+  print(c)
+  for (j in 1:3) {
+    if ((x+j) <= length(test1)){ #13
+      if ((test1[x+j]-test1[(x)]) <= 3){c = c  + counts(x+j)}
+    }
+  }
+
+  if (x+1 == length(test1)){return (1)}
+  else {return (c)}
+}
+counts(1) #19,208
+c=1
+print(c)
+```
+
+

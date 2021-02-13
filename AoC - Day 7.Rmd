@@ -1,0 +1,76 @@
+---
+title: "AoC - Day 7"
+output: html_notebook
+author: "Gozer Worshipper"
+---
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+in7 <- readLines("~/Documents/Data Science/Advent of Code/Inputs/AoC - Day 7.txt")
+View(in7)
+
+# PART 1
+
+lines = c()
+for (i in 1:length(in7)){
+  split = unlist(str_split(in7[i], "contain"))
+  split = cbind(split[1], unlist(strsplit(split[2], ",")))
+  lines = rbind(lines, split)
+}
+
+for (i in 1:nrow(lines)){
+  lines[i,1] = str_trim(lines[i,1])
+  lines[i,2] = str_trim(lines[i,2])
+  if (str_sub(lines[i,2], -1) == "."){
+    lines[i,2] = str_sub(lines[i,2], 1, -2)
+  }
+  if (str_sub(lines[i,2], -1) == "s"){
+    lines[i,2] = str_sub(lines[i,2], 1, -6)
+  }
+  if (str_sub(lines[i,2], -1) == "g"){
+    lines[i,2] = str_sub(lines[i,2], 1, -5)
+  }
+  lines[i,1] = str_sub(lines[i,1], 1, -6)
+}
+
+bags = c()
+for (j in 1:nrow(lines)){
+  if (str_detect(lines[j,2], "shiny gold")){
+    bags = rbind(bags, lines[j,1])
+  }
+}
+
+x=1
+while(x <= length(bags)){
+  for (j in 1:nrow(lines)){
+    if (str_detect(lines[j,2], str_sub(bags[x], 1, -7))){
+      new = T
+      for (k in 1:length(bags)){
+        if (lines[j,1] == bags[k]){new = F}
+      }
+      if (new == T){bags = rbind(bags, lines[j,1])}
+    
+    }
+  }
+  x = x+1
+}
+length(bags)
+
+# PART 2
+
+sum.childs <- function(x) {
+  sum = 0
+  for (i in 1:nrow(lines)){
+    if(str_detect(lines[i,1], x)){
+      if (!str_detect(lines[i,2], "other")){
+        sum = sum + (strtoi(str_sub(lines[i,2], 1, 1)) * sum.childs(str_sub(lines[i,2], 3, -1))) + 
+                       strtoi(str_sub(lines[i,2], 1, 1))
+      }
+    }
+  }
+  return (sum)
+}
+
+sum.childs("shiny gold")
+```

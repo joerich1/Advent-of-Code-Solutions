@@ -1,0 +1,147 @@
+---
+title: "AoC - Day 16"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+in16 <- readLines("~/Documents/Data Science/Advent of Code/Inputs/AoC - Day 16.txt")
+View(in16)
+```
+
+DATA PREP
+
+```{r}
+i = 1
+rules = data.frame(t[1], strtoi(v1[1]), strtoi(v1[2]), strtoi(v2[1]), strtoi(v2[2]))
+for (i in 2:20){
+  t = unlist(str_split(in16[i], ":", n=2))
+  u = unlist(str_split(t[2], "or", n=2))
+  v1 = unlist(str_split(str_trim(u[1]), "-", n=2))
+  v2 = unlist(str_split(str_trim(u[2]), "-", n=2))
+  rules = rbind(rules, data.frame(t[1], strtoi(v1[1]), strtoi(v1[2]), strtoi(v2[1]), strtoi(v2[2])))
+  }
+colnames(rules) = c("Field", "Min1", "Max1", "Min2", "Max2")
+rules
+your = strtoi(unlist(str_split(in16[23], ",")))
+nearby = rbind(strtoi(unlist(str_split(in16[26], ","))))
+for (i in 27:length(in16)){
+  nearby = rbind(nearby, rbind(strtoi(unlist(str_split(in16[i], ",")))))
+}
+nearby[1:10,]
+```
+PART 1
+
+```{r}
+invalids = c()
+discards = c()
+for (i in 1:nrow(nearby)){
+  for (k in 1:20){
+    valid = F
+    for (j in 1:nrow(rules)){
+      if ((nearby[i,k] >= rules$Min1[j] && nearby[i,k] <= rules$Max1[j]) || 
+          (nearby[i,k] >= rules$Min2[j] && nearby[i,k] <= rules$Max2[j])){valid = T}
+    }
+    if (valid == F){
+      invalids = c(invalids, nearby[i,k])
+      discards = c(discards, i)
+      }
+  }
+}
+sum(invalids)
+
+nearby = nearby[-unique(discards),]
+nearby[1:190,]
+```
+
+```{r}
+rules
+```
+
+
+PART 2
+
+```{r}
+i=1
+k=1
+j=1
+part2 <- function(){
+  order = c()
+  for (i in 1:20){
+    temp = c()
+    for (j in 1:nrow(rules)){
+      valid = T
+      for (k in 1:nrow(nearby)){
+        y=nearby[k,i]
+        if (!((nearby[k, i] >= rules$Min1[j] && nearby[k,i] <= rules$Max1[j]) || 
+            (nearby[k,i] >= rules$Min2[j] && nearby[k,i] <= rules$Max2[j]))){valid = F}
+      }
+      if (valid == T){temp = c(temp, j)}
+      else {temp = c(temp, 0)}
+    }
+    order = rbind(order, temp)
+  }
+  return (order)
+}
+
+v = data.frame(part2())
+v$Done = c(T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T, T)
+w=v
+
+p=0
+end=F
+part2b <- function(){
+  while(end == F) {
+    yoda=0
+    for (i in 1:20){
+      c=0
+      for (j in 1:20){
+        if (w[i,j] == 0 && w[i, 21] == T){c=c+1}
+        if (w[i,j] != 0 && w[i, 21] == T){
+          p=w[i,j]
+          x=j
+          y=i}
+      }
+      if (c == 19){
+        yoda=p
+        yoda.x=x
+        yoda.y=y
+        break
+      }
+    }
+  
+    for (i in 1:20){if (i != yoda.y){w[i, yoda.x] = 0}}
+    if (yoda==0){end = T}
+    w[yoda.y,21]=F
+  }
+  return (w)
+}
+  
+part2b()
+
+as.numeric(your[16]*your[18]*your[6])*as.numeric(your[1]*your[15]*your[11])
+```
+
+[1] "4"                            
+ [2] "15"
+ [3] "9"                                                                
+ [4] "17"         
+ [5] "16"      
+ [6] "3"             
+ [7] "20"                                      
+ [8] "14"                                                    
+ [9] "11"                   
+[10] "8"  
+[11] "6"                                 
+[12] "13"                                                                   
+[13] "12"     
+[14] "19"                                                        
+[15] "5"            
+[16] "1"                
+[17] "7"                                          
+[18] "2"               
+[19] "10"                                                            
+[20] "18"

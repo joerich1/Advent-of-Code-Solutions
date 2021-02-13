@@ -1,0 +1,24 @@
+---
+title: "AoC - Day 17"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+in17 <- readLines("~/Documents/Data Science/Advent of Code/Inputs/AoC - Day 17.txt")
+View(in17)
+```
+
+FIX SHIT
+
+```{r}
+cubes = data.frame(nrow = 22, ncol=22)
+colnames(cubes) = c(str_split(toString(seq(-7, 14, 1)), ","))
+for (i in 1:length(in16)){
+  
+}
+```
+

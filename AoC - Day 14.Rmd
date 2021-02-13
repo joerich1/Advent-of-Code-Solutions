@@ -1,0 +1,86 @@
+---
+title: "AoC - Day 14"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+library(Dict)
+in14 <- readLines("~/Documents/Data Science/Advent of Code/Inputs/AoC - Day 14.txt")
+in14 <- readLines("~/Documents/Data Science/Advent of Code/Inputs/AoC - Day 14 test.txt")
+View(in14)
+```
+
+DATA PREP
+
+```{r}
+decimals <- Dict$new("4841" = 0)
+```
+FUNCTIONS
+
+```{r}
+# Create a vector of powers of 2 (for use in conversions from binary vectors to integers).
+n=36
+powers.of.two <- 2^(0:(n - 1))
+
+# Convert a binary vector of appropriate length to an ID value (integer).
+toID <- function(vec) { as.integer(vec %*% powers.of.two) }
+
+#Apply bitmask
+masked <- function(mask, vec){
+  for (i in 1:36){
+    if (str_sub(mask, i, i) != "X"){vec[i] = strtoi(str_sub(mask, i, i))}
+  }
+  return (rev(vec))
+}
+
+byte.this.bitch <- function(int){
+  vec = c()
+  for (n in seq(35,0,-1)){
+    if (2**n <= int){
+      vec = c(vec, 1)
+      int = int - 2**n
+    }
+    else {vec=c(vec,0)}
+  }
+  return (vec)
+}
+```
+
+PART 1
+
+```{r}
+for (i in 1:length(in14)){
+  if (str_detect(in14[i], "mask")){mask = str_sub(in14[i], 8, -1)}
+  if (str_detect(in14[i], "mem")){
+    int = strtoi(str_sub(unlist(str_split(in14[i], "="))[2], 2, -1))
+    decimals[str_sub(unlist(str_split(in14[i], "]"))[1], 5, -1)] = 
+      toID(masked(mask, byte.this.bitch(int)))
+  }
+}
+View(decimals$print)
+s = 0
+for (i in 1:377){s = sum(s, as.numeric(decimals[i]))}
+s #266997422182 too fucking low!!!!!! Fuck you AOC! 259924748045 nope 275665135718 nope
+#10542166557 nope
+
+```
+
+TESTS
+
+```{r}
+test.int = 11
+test.vec = 000000000000000000000000000000001011
+test.mask = "XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X"
+test.answer = 000000000000000000000000000001001001 # = dec 73
+byte.this.bitch(test.int) == test.vec
+toID(masked(test.mask, byte.this.bitch(test.int)))
+str_length(test.mask)
+
+
+
+```
+
