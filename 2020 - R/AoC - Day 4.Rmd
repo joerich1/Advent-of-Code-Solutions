@@ -1,0 +1,90 @@
+---
+title: "AoC 2020 - Day 4"
+output: html_notebook
+author: "Joseph Richardson"
+---
+
+```{r}
+rm(list=ls())
+library(stringr)
+input4 = readLines("~/Documents/Data Science/Advent of Code/Inputs/AoC - Day 4.txt")
+test = readLines("~/Documents/Data Science/Advent of Code/Inputs/AoC - Day 4 test.txt")
+
+head(input4)
+
+# PART 1
+
+counts = 0
+count = 0
+for (i in 1:length(input4)){
+  
+  if (str_detect(input4[i], "byr")){count = count + 1}
+  if (str_detect(input4[i], "iyr")){count = count + 1}
+  if (str_detect(input4[i], "eyr")){count = count + 1}
+  if (str_detect(input4[i], "hgt")){count = count + 1}
+  if (str_detect(input4[i], "hcl")){count = count + 1}
+  if (str_detect(input4[i], "ecl")){count = count + 1}
+  if (str_detect(input4[i], "pid")){count = count + 1}
+  if (input4[i] == "" || i == length(input4)){
+    if (count == 7){counts = counts + 1}
+    count=0
+  }
+}
+counts
+
+# PART 2
+
+eyes = c("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
+counts = 0
+count = 0
+for (i in 1:length(input4)){
+  if (input4[i] == ""){input4[i] = "x"}
+  line = unlist(strsplit(input4[i], " "))
+  for (j in 1:length(line)){
+    if (str_detect(line[j], "byr")){
+      if(sub("*byr:", "", line[j]) >= 1920 && sub("*byr:", "", line[j]) <= 2002){
+        if (str_count(sub("*byr:", "", line[j]), "[1234567890]") == 4){count = count + 1}
+      }
+    }
+    if (str_detect(line[j], "iyr")){
+      if(sub("*iyr:", "", line[j]) >= 2010 && sub("*iyr:", "", line[j]) <= 2020){
+        if (str_count(sub("*iyr:", "", line[j]), "[1234567890]") == 4){count = count + 1}
+      }
+    }
+    if (str_detect(line[j], "eyr")){
+      if(sub("*eyr:", "", line[j]) >= 2020 && sub("*eyr:", "", line[j]) <= 2030){
+        if (str_count(sub("*eyr:", "", line[j]), "[1234567890]") == 4){count = count + 1}
+      }
+    }
+    if (str_detect(line[j], "hgt")){
+      if(str_detect(line[j], "in")){
+        number = strtoi(sub("in.*", "", sub("*hgt:", "", line[j])))
+        if(number  >= 59 && number <= 76){count = count + 1}
+      }
+      if(str_detect(line[j], "cm")){
+        number = strtoi(sub("cm.*", "", sub("*hgt:", "", line[j])))
+        if(number  >= 150 && number <= 193){count = count + 1}
+      }
+    }
+    if (str_detect(line[j], "hcl")){
+      hcl = sub("*hcl:", "", line[j])
+      if (str_sub(hcl, 1, 1) == "#" && str_count(hcl, "[abcdefghijklmnopqrstuvwxyz0123456789]") == 6){
+        count = count + 1
+        }
+    }
+    if (str_detect(line[j], "ecl")){
+      for (m in 1:length(eyes)){
+        if(str_detect(sub("*ecl:", "", line[j]), eyes[m]) && 
+          str_length(sub("*ecl:", "", line[j])) == 3) {count = count + 1}
+      }
+    }
+    if (str_detect(line[j], "pid")){
+      if(str_count(sub("*pid:", "", line[j]), "[1234567890]") == 9){count = count + 1}
+    }
+  }
+  if(input4[i] == "x" || i == length(input4)){if(count == 7){counts = counts + 1}
+    count=0
+    }
+  }
+counts
+```

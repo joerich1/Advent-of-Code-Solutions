@@ -1,0 +1,50 @@
+---
+title: "AoC - Day 15"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(rapportools)
+library(Dict)
+library(hash)
+in15 = c(0,13,1,8,6,15)
+?hash
+```
+
+PARTS 1 & 2
+
+```{r}
+lasts <- hash(
+  "0" = 1,
+  "13" = 2,
+  "1" = 3,
+  "8" = 4,
+  "6" = 5)
+j = in15[6]
+i=6
+for (i in 6:30000000){
+  x=toString(j)
+  if (is.null(lasts[[x]])){
+    #in15 = c(in15, 0)
+    j = 0
+    lasts[[x]] = i
+    }
+  if (!is.null(lasts[[x]])) {
+    #in15 = c(in15, (i-lasts[[x]]))
+    j = i-lasts[[x]]
+    lasts[[x]] = i
+  }
+}
+x
+in15[1:20]
+lasts
+i=i+1
+lasts
+lasts
+lasts[["4"]]=3
+```
+
+

@@ -1,0 +1,36 @@
+---
+title: "AoC 2020 - Day 2"
+output: html_notebook
+author: "Joseph Richardson"
+---
+
+```{r}
+library(stringr)
+input2 <- read.table("~/Documents/Data Science/Advent of Code/Aoc - Day 2 - Sheet1.csv", 
+                     quote="\"", comment.char="")
+#View(input2)
+
+#PART 1
+valid.count = 0
+for (i in 1:1000){
+  min = strtoi(unlist(str_extract_all(input2[i,1], "[^-]+")))[1]
+  max = strtoi(unlist(str_extract_all(input2[i,1], "[^-]+")))[2]
+  letter = unlist(str_extract_all(input2[i,2], "[^:]+"))
+  frequency = str_count(input2[i,3], letter)
+  if (frequency >= min & frequency <= max){valid.count = valid.count + 1}
+}
+valid.count
+
+#PART 2
+valid.count = 0
+for (i in 1:1000){
+  first = strtoi(unlist(str_extract_all(input2[i,1], "[^-]+")))[1]
+  second = strtoi(unlist(str_extract_all(input2[i,1], "[^-]+")))[2]
+  letter = unlist(str_extract_all(input2[i,2], "[^:]+"))
+  count = 0
+  if (str_sub(input2[i,3], first, first) == letter){count = count + 1}
+  if (str_sub(input2[i,3], second, second) == letter){count = count + 1}
+  if (count == 1){valid.count = valid.count + 1}
+}
+valid.count
+```

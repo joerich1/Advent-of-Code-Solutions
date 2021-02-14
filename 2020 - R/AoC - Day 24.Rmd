@@ -1,0 +1,105 @@
+---
+title: "Aoc 2020 - Day 24"
+output: html_notebook
+
+---
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+library(hash)
+#library(stringi)
+in24 <- readLines("~/Classes/Advent of Code/Inputs/AoC - Day 24.txt")
+View(in24)
+```
+
+PART 1
+
+```{r}
+vx <- seq(-100, 100, 0.5)
+vy <- seq(-100, 100, 0.5)
+
+i=1
+
+part1 <- function(x){
+  coords = data.frame(matrix(nrow=401, ncol=401))
+  colnames(coords) = vx
+  row.names(coords) = vy
+  for (i in vx){
+    for (j in vy){
+      coords[toString(i), toString(j)] = 1
+    }
+  }
+  c = 0
+  for (i in 1:length(in24)){
+    x = 0
+    y = 0
+    j = 1
+    while (j <= str_length(in24[i])){
+      d = str_sub(in24[i], j, j)
+      if (d %in% c("s", "n")){d = str_sub(in24[i], j, j+1)}
+      if (d == "e"){x = x + 1}
+      if (d == "w"){x = x - 1}
+      if (d == "se"){
+        x = x + 0.5
+        y = y - 0.5
+      }
+      if (d == "ne"){
+        x = x + 0.5
+        y = y + 0.5
+      }
+      if (d == "sw"){
+        x = x - 0.5
+        y = y - 0.5
+      }
+      if (d == "nw"){
+        x = x - 0.5
+        y = y + 0.5
+      }
+      if (d %in% c("e", "w")){j = j + 1}
+      if (d %in% c("ne", "nw", "se", "sw")){j = j + 2}
+    }
+    m = coords[toString(y), toString(x)]*(-1)
+    coords[toString(y), toString(x)] = m
+    if (m == -1){c = c + 1}
+    if (m == 1){c = c - 1}
+  }
+  return (coords)
+}
+
+part1()
+#302 low
+```
+
+PART 2
+
+```{r}
+coords1 = part1()
+coords = coords1
+temp = coords
+i=1
+j=1
+
+for (i in vx[3:(length(vx)-2)]){
+  for (j in vy[3:(length(vy)-2)]){
+    c = 0
+    if (coords[toString(i-0.5), toString(j+0.5)] == -1){c = c + 1} #NW
+    if (coords[toString(i-0.5), toString(j-0.5)] == -1){c = c + 1} #SW
+    if (coords[toString(i+0.5), toString(j+0.5)] == -1){c = c + 1} #NE
+    if (coords[toString(i+0.5), toString(j-0.5)] == -1){c = c + 1} #SE
+    if (coords[toString(i+1), toString(j)] == -1){c = c + 1} #E
+    if (coords[toString(i-1), toString(j)] == -1){c = c + 1} #W
+    if (coords[toString(i),toString(j)] == -1 && (c == 0 || c > 2)){
+      temp[toString(i),toString(j)] = 1
+    }
+    if (coords[toString(i),toString(j)] == 1 && c == 2){
+      temp[toString(i),toString(j)] = -1
+    }
+  }
+}
+
+
+```
+
+

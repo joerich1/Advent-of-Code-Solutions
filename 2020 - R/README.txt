@@ -1,0 +1,1 @@
+I'm using R for AoC 2020 to get some much-needed practice with the coding languange beyond the statistical applications I've learned in grad school recently.

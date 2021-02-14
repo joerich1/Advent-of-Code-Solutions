@@ -1,0 +1,107 @@
+---
+title: "AoC - Day 8"
+output: html_notebook
+---
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+in8 <- readLines("~/Classes/Advent of Code/Inputs/AoC - Day 8.txt")
+#View(in8)
+
+#PART 1
+
+acc=0
+j = T
+i = 1
+lines = c()
+while (j == T){
+  k = i
+  if (str_sub(in8[i], 1, 3) == "acc")
+    {
+    acc = acc + strtoi(str_sub(in8[i], 5, -1))
+    k = i + 1
+    lines = rbind(lines, c(i, acc, strtoi(str_sub(in8[i], 5, -1))))
+    if (k %in% lines[,1]){break}
+    }
+  if (str_sub(in8[i], 1, 3) == "nop"){
+    k = i + 1
+    lines = rbind(lines, c(i, acc, strtoi(str_sub(in8[i], 5, -1))))
+    if (k %in% lines[,1]){break}
+    }
+  if (str_sub(in8[i], 1, 3) == "jmp"){
+    k = i + strtoi(str_sub(in8[i], 5, -1))
+    lines = rbind(lines, c(i, acc, strtoi(str_sub(in8[i], 5, -1))))
+    if (k %in% lines[,1]){break} 
+    }
+  i = k
+}
+acc
+
+#PART 2
+
+acc=0
+done = F
+x = 1
+while (done == F){
+  lines = c()
+  if (str_sub(in8[x], 1, 3) == "nop"){
+    in8[x] = str_replace(in8[x], "nop", "jmp")
+  } else if (str_sub(in8[x], 1, 3) == "jmp"){
+    in8[x] = str_replace(in8[x], "jmp", "nop")
+  }
+  i = 1
+  acc = 0
+  repeat {
+    k = i
+    if (str_sub(in8[i], 1, 3) == "acc"){
+      acc = acc + strtoi(str_sub(in8[i], 5, -1))
+      k = i + 1
+      lines = rbind(lines, c(i, acc, strtoi(str_sub(in8[i], 5, -1))))
+      if (k %in% lines[,1]){
+        if (str_sub(in8[x], 1, 3) == "nop"){
+          in8[x] = str_replace(in8[x], "nop", "jmp")
+         }  else if (str_sub(in8[x], 1, 3) == "jmp"){
+          in8[x] = str_replace(in8[x], "jmp", "nop")
+           }
+        x = x + 1
+        break
+        }
+    }
+    
+    if (str_sub(in8[i], 1, 3) == "nop"){
+      k = i + 1
+      lines = rbind(lines, c(i, acc, strtoi(str_sub(in8[i], 5, -1))))
+      if (k %in% lines[,1]){
+        if (str_sub(in8[x], 1, 3) == "nop"){
+          in8[x] = str_replace(in8[x], "nop", "jmp")
+        }  else if (str_sub(in8[x], 1, 3) == "jmp"){
+          in8[x] = str_replace(in8[x], "jmp", "nop")
+        }
+        x = x + 1
+        break
+        }
+      }
+    
+    if (str_sub(in8[i], 1, 3) == "jmp"){
+      k = i + strtoi(str_sub(in8[i], 5, -1))
+      lines = rbind(lines, c(i, acc, strtoi(str_sub(in8[i], 5, -1))))
+      if (k %in% lines[,1]){
+        if (str_sub(in8[x], 1, 3) == "nop"){
+          in8[x] = str_replace(in8[x], "nop", "jmp")
+        }  else if (str_sub(in8[x], 1, 3) == "jmp"){
+          in8[x] = str_replace(in8[x], "jmp", "nop")
+        }
+        x = x + 1
+        break
+        } 
+      }
+    i = k
+    if (i == 623){
+      done = T
+      break
+      }
+  }
+}
+acc
+```
+

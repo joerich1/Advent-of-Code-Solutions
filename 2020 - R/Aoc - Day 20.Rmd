@@ -1,0 +1,61 @@
+---
+title: "AoC - Day 20"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+library(hash)
+library(stringi)
+in20 <- readLines("~/Classes/Advent of Code/Inputs/AoC - Day 20.txt")
+View(in20)
+```
+
+DATA PREP
+
+```{r}
+i=2
+images <- hash()
+keys = c()
+for (i in 1:length(in20)){
+  line = in20[i]
+  if (str_detect(line, "Tile")){
+    id = str_sub(line, 6, 9)
+    keys = c(keys, id)
+    j=1}
+  else {
+    if (j == 2){images[[str_c(id, "", "T")]] = line}
+    if (j == 11){images[[str_c(id, "", "B")]] = line}
+    if (j <= 11 && j >= 1){
+      images[[str_c(id, "", "L")]] = str_c(images[[str_c(id, "", "L")]], "", str_sub(line, 1, 1))
+      images[[str_c(id, "", "R")]] = str_c(images[[str_c(id, "", "R")]], "", str_sub(line, -1, -1))
+      }
+  }
+  j = j + 1
+}
+images[["2897R"]]
+as.list(images)
+keys
+```
+FUNCS
+
+```{r}
+c=0
+s.t = images[[str_c(toString(keys[1]),"","T")]]
+s.b = images[[str_c(toString(keys[1]),"","B")]]
+s.l = images[[str_c(toString(keys[1]),"","L")]]
+s.r = images[[str_c(toString(keys[1]),"","R")]]
+for (i in 2:length(keys)){
+  a.t = images[[str_c(toString(keys[i]),"","T")]]
+  a.b = images[[str_c(toString(keys[i]),"","B")]]
+  a.l = images[[str_c(toString(keys[i]),"","L")]]
+  a.r = images[[str_c(toString(keys[i]),"","R")]]
+  if (s.t == a.r || s.t == stri_reverse(a.r)){c = c + 1}
+
+}
+c
+```
+

@@ -1,0 +1,42 @@
+---
+title: "Day 6"
+author: "Joseph Richardson"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+```{r}
+library(stringr)
+rm(list = ls()) #Clear the environment
+in6 <- readLines("~/Classes/Advent of Code/AoC - Day 6.txt")
+#tail(in6)
+
+# PART 1
+
+start = 1
+yes = c()
+for (i in 1:length(in6)){
+  if (in6[i] == ""  | i == length(in6)){
+    if (i == length(in6)){i = i+1}
+    yes = rbind(yes, sum(!!str_count(str_c(in6[start:i-1], "", collapse=""), letters)))
+    start = i+1
+  }
+}
+sum(yes)
+
+# PART 2
+
+start = 1
+yes = c()
+for (i in 1:length(in6)){
+  if (in6[i] == ""  | i == length(in6)){
+    if (i == length(in6)){i = i+1}
+    yes = rbind(yes, length(which(str_count(str_c(in6[start:i-1], "", collapse=""), letters) == i-start)))
+    start = i+1
+  }
+}
+sum(yes)
+```
+

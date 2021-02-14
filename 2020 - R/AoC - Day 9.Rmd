@@ -1,0 +1,48 @@
+---
+# title: "AoC 2020 - Day 9"
+output: html_notebook
+---
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+#in9 <- readLines("~/Classes/Advent of Code/Inputs/AoC - Day 9.txt")
+in9 <- read.table("~/Classes/Advent of Code/inputs/AoC - Day 9 - Sheet1.csv", quote="\"", comment.char="")
+View(in9)
+
+# PART 1
+
+for (i in 26:nrow(in9)){
+  valid = F
+  for (j in 1:24){
+    for (k in 2:25){
+      if ((j < k) && (in9[i,1] == sum(in9[i-j,1]) + sum(in9[i-k,1]))){
+        valid = T
+      }
+    }
+  }
+  if (valid == F){break}
+}
+in9[i,1]
+
+# PART 2
+
+min = 0
+max = 0
+for (i in 1:559){
+  sum = 0
+  for (j in 0:558){
+    sum = sum + in9[(i+j), 1]
+    if (i+j <560){
+      if (sum == in9[ind,1]){
+        min = min(in9[i:(i+j), 1])
+        max = max(in9[i:(i+j), 1])
+      }
+    }
+  }
+}
+sum(min, max)
+```
+
+
+

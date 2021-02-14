@@ -1,0 +1,41 @@
+---
+title: "AoC 2020 - Day 25"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+pubkeys = c(2084668,3704642)
+```
+
+WHAT WHAT
+
+```{r}
+#pubkeys=c(5764801, 17807724)
+a=1
+j=1
+while (a != pubkeys[1]){
+  a = a * 7
+  a = a %% 20201227
+  j=j+1
+}
+i #card secret loop size = 12419161
+j #door secret loop size = 2115362
+
+a=1
+for (k in 1:(i-1)){
+  a = a * pubkeys[2]
+  a = a %% 20201227
+  }
+a # 2447794 high
+
+b=1
+for (k in 1:(j-1)){
+  b = b * pubkeys[2]
+  b = b %% 20201227
+}
+b
+```
+

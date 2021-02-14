@@ -1,0 +1,68 @@
+---
+title: "AoC - Day 19"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+#library(hash)
+in19 <- readLines("~/Classes/Advent of Code/Inputs/AoC - Day 19.txt")
+View(in19)
+```
+
+DATA PREP
+
+```{r}
+received = c()
+for (i in 137:504){
+  received = rbind(received, in19[i])
+}
+
+rules = data.frame()
+for (i in 1:135){
+  s=in19[i]
+  col = str_locate(s, ":")[1]
+  key = str_sub(s, 1, col-1)
+  val = str_sub(s, col+2, -1)
+  rules = rbind(rules, c(key,val))
+}
+colnames(rules) = c("key", "value")
+rules[, 1] <- sapply(rules[, 1], as.numeric)
+rules = rules[order(rules$key),]
+rules
+```
+
+FUNCS
+
+```{r}
+Numextract <- function(string){
+  unlist(regmatches(string,gregexpr("[[:digit:]]+\\.*[[:digit:]]*",string)))
+}
+
+messages = c()
+s = "aba"
+vec = c("abb", "aba")
+x=1
+a=71
+b=72
+dune <- function(x){
+  c = rules[(x+1),2]
+  if (x == a){return ("a")}
+  if (x == b){return ("b")}
+  if (str_detect(c, "|")){
+    d = as.numeric(unlist(str_split(c, " "))[-3])
+    i = 1
+    while (i <= 4){
+      v1 = dune[d[i]+1]
+      for (j in 1:length(v1)){v1[j] = str_c(s, v1[j])}
+      v2 = dune[d[i]+2]
+      for (j in 1:length(v2)){v2[j] = str_c(s, v2[j])}
+  }
+  messages = c(messages, s)
+}
+str_c("", "", "a")
+```
+

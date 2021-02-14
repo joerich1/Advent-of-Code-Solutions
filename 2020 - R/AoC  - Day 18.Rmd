@@ -1,0 +1,133 @@
+---
+title: "AoC 2020 - Day 18"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+options(scipen=999)
+in18 <- readLines("~/Classes/Advent of Code/Inputs/AoC - Day 18.txt")
+View(in18)
+in18[1]
+```
+PART 1
+
+```{r}
+Numextract <- function(string){
+  unlist(regmatches(string,gregexpr("[[:digit:]]+\\.*[[:digit:]]*",string)))
+}
+
+#SOLVE A STRING WITH NO PARANTHESIS IN IT
+solve <- function(t){
+  repeat{
+    n = as.numeric(Numextract(t))
+    x = n[1]
+    a = str_locate(t, "[+*]")[1]
+    y = n[2]
+    op = str_sub(t, a, a)
+    if (op == "+"){z = x + y}
+    if (op == "*"){z = x * y}
+    leny = str_length(toString(y))
+    if (str_length(t) == (a + 1 + leny)){return(toString(z))}
+    t = str_c(toString(z), str_sub(t, (a + 2 + leny), -1))
+  }
+}
+
+solve.line <- function(s){
+  while (str_detect(s, "\\(")){
+    end = str_locate(s, "\\)")[1]
+    starts = unlist(str_locate_all(s, "\\("))
+    starts = starts[1:(length(starts)/2)]
+    start = starts[findInterval(end, starts)]
+    t = str_sub(s, (start + 1), (end - 1))
+    s = str_c(str_sub(s, 1, (start-1)), solve(t), str_sub(s, (end + 1), -1))
+  }
+  return (solve(s))
+}
+
+#do eet
+zlist = c()
+for (i in 1:length(in18)){
+  zlist = c(zlist, as.numeric(solve.line(in18[i])))
+}
+
+sum(zlist)
+```
+
+PART 2
+
+```{r}
+# PAM
+solve.line <- function(s){
+  while (str_detect(s, "\\(")){
+    end = str_locate(s, "\\)")[1]
+    starts = unlist(str_locate_all(s, "\\("))
+    starts = starts[1:(length(starts)/2)]
+    start = starts[findInterval(end, starts)]
+    t = str_sub(s, (start + 1), (end - 1))
+    s = str_c(str_sub(s, 1, (start-1)), 
+              solve(solve.add(t)), 
+              str_sub(s, (end + 1), -1))
+  }
+  return (solve(solve.add(s)))
+}
+
+#ONLY DO ADDITION
+solve.add <- function(t){
+  while (str_detect(t, "\\+")){
+    n = as.numeric(Numextract(t))
+    ops = unlist(str_locate_all(t, "[*+]"))
+    ops = ops[1:(length(ops)/2)]
+    nops = length(ops)
+    for (i in 1:nops){
+      op = str_sub(t, ops[i], ops[i])
+      if (op == "+"){
+        x = n[i]
+        lenx = str_length(toString(x))
+        y = n[i+1]
+        z = x + y
+        leny = str_length(toString(y))
+        if (i == 1){t = str_c(toString(z), str_sub(t, (ops[i] + 2 + leny), -1))}
+        if (i == length(ops)){
+          t = str_c(str_sub(t, 1, (ops[i] - lenx - 2)), toString(z))
+        }
+        if (i != length(ops) && i != 1){
+          t = str_c(str_sub(t, 1, (ops[i] - lenx - 2)), 
+                    toString(z), 
+                    str_sub(t, (ops[i] + 2 + leny), -1))
+        }
+        break
+      }
+    }
+  }
+  return (t)
+}
+
+# MULTIPLY
+solve <- function(t){
+  repeat{
+    if (!str_detect(t, "\\*")){return (t)}
+    n = as.numeric(Numextract(t))
+    x = n[1]
+    a = str_locate(t, "\\*")[1]
+    y = n[2]
+    op = str_sub(t, a, a)
+    if (op == "*"){z = x * y}
+    leny = str_length(toString(y))
+    if (str_length(t) == (a + 1 + leny)){return(toString(z))}
+    t = str_c(toString(z), str_sub(t, (a + 2 + leny), -1))
+  }
+}
+
+#do eet again
+zlist = c()
+for (i in 1:length(in18)){
+  zlist = c(zlist, as.numeric(solve.line(in18[i])))
+}
+sum(zlist)
+
+```
+

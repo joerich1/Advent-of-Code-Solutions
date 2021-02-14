@@ -1,0 +1,67 @@
+---
+title: "AoC - Day 21"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+library(hash)
+library(stringi)
+in21 <- readLines("~/Classes/Advent of Code/Inputs/AoC - Day 21.txt")
+View(in21)
+?hash()
+```
+
+PARTS 1 & 2
+
+```{r}
+part1 <- function(){
+  allergens = hash()
+  for (i in 1:length(in21)){
+    v=unlist(str_split(in21[i], "contains"))
+    u=unlist(str_split(v[1], " ")) #ingredients
+    u=u[1:(length(u)-1)]
+    w=unlist(str_split(v[2], ", ")) #allergens
+    w[length(w)] = str_sub(w[length(w)], 1, -2)
+    w = str_trim(w)
+    for (j in 1:length(w)){
+      if (is.null(unlist(as.list(allergens[[w[j]]])))){
+        allergens[[w[j]]] = u}
+      else {allergens[[w[j]]] = intersect(u, allergens[[w[j]]])}
+    }
+  }
+  return (allergens)
+}
+allergens = part1()
+View(allergens)
+
+ingredients = hash(
+    "dairy" = "nfnfk",
+    "eggs" =  "nbgklf",
+    "fish" = "clvr",
+    "nuts" = "fttbhdr",    
+    "peanuts" = "qjxxpr", 
+    "sesame" = "hdsm", 
+    "soy" = "sjhds",
+    "wheat" = "xchzh"
+)
+
+ingredients = c("nfnfk","nbgklf", "clvr", "fttbhdr", "qjxxpr",
+                "hdsm", "sjhds", "xchzh")
+
+c=0
+for (i in 1:length(in21)){
+  v = unlist(str_split(in21[i], "contains"))
+  u = unlist(str_split(v[1], " ")) #ingredients
+  u = u[1:(length(u)-1)]
+  for (j in 1:length(u)){
+    if (!(u[j] %in% ingredients)){c = c + 1}
+  }
+}
+c #710 too low
+str_c(ingredients,",", collapse = "")
+```
+

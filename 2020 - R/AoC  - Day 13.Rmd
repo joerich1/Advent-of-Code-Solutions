@@ -1,0 +1,84 @@
+---
+title: "AoC - Day 13"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+options(scipen=999)
+in13.1 = 1000053
+in13.2 = "19,x,x,x,x,x,x,x,x,x,x,x,x,37,x,x,x,x,x,523,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,13,x,x,x,x,23,x,x,x,x,x,29,x,547,x,x,x,x,x,x,x,x,x,41,x,x,x,x,x,x,17"
+in13.2
+in13.2 = unlist(str_split(in13.2, ",", n=Inf))
+```
+
+PART 1
+
+```{r}
+numbs = c()
+for (i in 1:length(in13.2)){
+  if (str_detect(in13.2[i], "[:digit:]")){
+    numbs = rbind(numbs, ((floor(in13.1/strtoi(in13.2[i]))+1)*strtoi(in13.2[i]))-in13.1)}
+}
+sort(numbs)
+((floor(in13.1/strtoi(in13.2[i]))+1)*strtoi(in13.2[i]))-in13.1
+6*17
+```
+
+
+PART 2
+
+```{r}
+# CREATE DATAFRAME
+ids = c()
+for (j in 1:length(in13.2)){
+  if (str_detect(in13.2[j], "[:digit:]")){
+    temp = cbind(strtoi(in13.2[j]), (j-1))
+    ids = rbind(ids,temp)
+  }
+}
+ids = data.frame(ids)
+colnames(ids) = c('ID', 'time')
+r = ids$ID - ids$time
+ids = data.frame(ids, r)
+
+# FIX NEGATIVES AND ZEROES
+for (i in 1:nrow(ids)){
+  while (ids$r[i] < 0){ids$r[i] = ids$r[i] + ids$ID[i]}
+  if (ids$ID[i] == ids$r[i]){ids$r[i] = 0}}
+
+
+# CHINESE REMAINDER THEOREM
+ids = ids[order(ids$ID),]
+x = ids$r[9]
+while (x %% ids$ID[8] != ids$r[8]){
+  x = x + ids$ID[9]
+}
+while (x %% ids$ID[7] != ids$r[7]){
+  x = x + (ids$ID[9]*ids$ID[8])
+}
+while (x %% ids$ID[6] != ids$r[6]){
+  x = x + (ids$ID[9]*ids$ID[8]*ids$ID[7])
+}
+while (x %% ids$ID[5] != ids$r[5]){
+  x = x + (ids$ID[9]*ids$ID[8]*ids$ID[7]*ids$ID[6])
+}
+while (x %% ids$ID[4] != ids$r[4]){
+  x = x + (ids$ID[9]*ids$ID[8]*ids$ID[7]*ids$ID[6]*ids$ID[5])
+}
+while (x %% ids$ID[3] != ids$r[3]){
+  x = x + (ids$ID[9]*ids$ID[8]*ids$ID[7]*ids$ID[6]*ids$ID[5]*ids$ID[4])
+}
+while (x %% ids$ID[2] != ids$r[2]){
+  x = x + (ids$ID[9]*ids$ID[8]*ids$ID[7]*ids$ID[6]*ids$ID[5]*ids$ID[4]*ids$ID[3])
+}
+while (x %% ids$ID[1] != ids$r[1]){
+  x = x + (ids$ID[9]*ids$ID[8]*ids$ID[7]*ids$ID[6]*ids$ID[5]*ids$ID[4]*ids$ID[3]*ids$ID[2])
+}
+x
+
+```
+

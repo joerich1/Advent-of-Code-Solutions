@@ -1,0 +1,23 @@
+---
+title: "AoC 2020 - Day 1"
+output: html_notebook
+---
+
+```{r}
+input1 <- read.table("C:/Users/Joe/Downloads/AoC_ Input 1 - Sheet1.csv", quote="\"", comment.char="")
+View(input1)
+
+product=0
+for (i in 1:200){
+  for (j in i:200){
+    for (k in j:200){
+      if (input1$V1[i]+input1$V1[j]+input1$V1[k] == 2020){
+        product=input1$V1[i]*input1$V1[j]*input1$V1[k]
+      }
+    }
+  }
+}
+
+input1$V1[2]
+product
+```

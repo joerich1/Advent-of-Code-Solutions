@@ -1,0 +1,34 @@
+---
+title: "AoC 2020 - EDay 22"
+output: html_notebook
+---
+
+INPUT
+
+```{r}
+rm(list = ls()) #Clear the environment
+library(stringr)
+library(hash)
+#library(stringi)
+in22 <- readLines("~/Classes/Advent of Code/Inputs/AoC - Day 22.txt")
+View(in22)
+```
+
+PARTS 1 & 2
+
+```{r}
+player1 = strtoi(in22[2:26])
+player2 = strtoi(in22[29:53])
+while (length(player1) > 0 && length(player2) > 0){
+  if (player1[1] < player2[1]){
+    player2 = c(player2[-1], player2[1], player1[1])
+    player1 = player1[-1]
+  }
+  if (player1[1] > player2[1]){
+    player1 = c(player1[-1], player1[1], player2[1])
+    player2 = player2[-1]
+  }
+}
+sum(t(rev(player1)) %*% seq(1, 50,1))
+```
+
