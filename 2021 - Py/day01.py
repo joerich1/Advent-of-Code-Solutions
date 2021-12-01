@@ -1,7 +1,5 @@
 from day01_input import raw
 import gozer
-import numpy as np
-import pandas as pd
 
 
 # If lines from a text input needs to be split into rows of a list
