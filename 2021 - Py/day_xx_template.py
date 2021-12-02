@@ -16,7 +16,7 @@ dict_map = {}
 # If lines from a text input needs to be split into rows of a list
 inp = gozer.readlines(raw, to_int=False, to_np=False)
 inp_test = gozer.readlines(test, to_int=False, to_np=False, np_map = None)
-# print(inp_test)
+# print(inp)
 # print(inp_test)
 
 

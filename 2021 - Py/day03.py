@@ -5,8 +5,8 @@ TIME: XX MINUTES
 AUTHOR: JOSEPH RICHARDSON
 """
 
-from day_xx_input_template import raw
-from day_xx_input_template import test
+from day03_input import raw
+from day03_input import test
 import gozer
 import numpy as np
 import pandas as pd
