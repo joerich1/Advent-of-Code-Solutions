@@ -1,3 +1,10 @@
+"""
+ADVENT OF CODE: 2021
+DAY: 1
+TIME: 9 MINUTES
+AUTHOR: JOSEPH RICHARDSON
+"""
+
 from day01_input import raw
 import gozer
 
