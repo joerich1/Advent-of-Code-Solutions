@@ -11,6 +11,7 @@ import gozer
 import numpy as np
 import pandas as pd
 
+dict_map = {}
 
 # If lines from a text input needs to be split into rows of a list
 inp = gozer.readlines(raw, to_int=False, to_np=False)

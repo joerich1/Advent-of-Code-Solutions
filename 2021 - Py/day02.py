@@ -9,8 +9,6 @@ from day02_input import raw
 from day02_input import test
 import gozer
 
-dict_map = {}
-
 # If lines from a text input needs to be split into rows of a list
 inp = gozer.readlines(raw, to_int=False, to_np=False, np_map=None)
 inp_test = gozer.readlines(test, to_int=False, to_np=False, np_map=None)
