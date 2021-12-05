@@ -5,8 +5,7 @@ TIME: 11 MINUTES
 AUTHOR: JOSEPH RICHARDSON
 """
 
-from day02_input import raw
-from day02_input import test
+from day02_input import test, raw
 import gozer
 
 # If lines from a text input needs to be split into rows of a list
